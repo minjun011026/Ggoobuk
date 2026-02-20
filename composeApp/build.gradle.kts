@@ -1,9 +1,9 @@
 plugins {
-    alias(libs.plugins.template.primitive.kmp)
-    alias(libs.plugins.template.primitive.kmp.ios)
-    alias(libs.plugins.template.primitive.skie)
-    alias(libs.plugins.template.primitive.koin)
-    alias(libs.plugins.template.primitive.kmp.compose)
-    alias(libs.plugins.template.primitive.compose.resources)
-    alias(libs.plugins.template.primitive.spotless)
+    alias(libs.plugins.ggoobuk.primitive.kmp)
+    alias(libs.plugins.ggoobuk.primitive.kmp.ios)
+    alias(libs.plugins.ggoobuk.primitive.skie)
+    alias(libs.plugins.ggoobuk.primitive.koin)
+    alias(libs.plugins.ggoobuk.primitive.kmp.compose)
+    alias(libs.plugins.ggoobuk.primitive.compose.resources)
+    alias(libs.plugins.ggoobuk.primitive.spotless)
 }

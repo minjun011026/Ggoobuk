@@ -2,7 +2,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "com.minjun.convention"
+group = "com.ggoobuk.convention"
 
 dependencies {
     implementation(libs.android.gradlePlugin)
@@ -16,36 +16,36 @@ dependencies {
 gradlePlugin {
     plugins {
         register("kmpPrimitive") {
-            id = "template.primitive.kmp"
-            implementationClass = "com.minjun.primitive.KmpPrimitivePlugin"
+            id = "ggoobuk.primitive.kmp"
+            implementationClass = "com.ggoobuk.primitive.KmpPrimitivePlugin"
         }
         register("kmpIosPrimitive") {
-            id = "template.primitive.kmp.ios"
-            implementationClass = "com.minjun.primitive.KmpIosPrimitivePlugin"
+            id = "ggoobuk.primitive.kmp.ios"
+            implementationClass = "com.ggoobuk.primitive.KmpIosPrimitivePlugin"
         }
         register("kmpComposePrimitive") {
-            id = "template.primitive.kmp.compose"
-            implementationClass = "com.minjun.primitive.KmpComposePrimitivePlugin"
+            id = "ggoobuk.primitive.kmp.compose"
+            implementationClass = "com.ggoobuk.primitive.KmpComposePrimitivePlugin"
         }
         register("composeResourcePrimitive") {
-            id = "template.primitive.compose.resources"
-            implementationClass = "com.minjun.primitive.ComposeResourceConventionPlugin"
+            id = "ggoobuk.primitive.compose.resources"
+            implementationClass = "com.ggoobuk.primitive.ComposeResourceConventionPlugin"
         }
         register("kmpSkiePrimitive") {
-            id = "template.primitive.skie"
-            implementationClass = "com.minjun.primitive.KmpSkieConventionPlugin"
+            id = "ggoobuk.primitive.skie"
+            implementationClass = "com.ggoobuk.primitive.KmpSkieConventionPlugin"
         }
         register("spotlessPrimitive") {
-            id = "template.primitive.spotless"
-            implementationClass = "com.minjun.primitive.SpotlessConventionPlugin"
+            id = "ggoobuk.primitive.spotless"
+            implementationClass = "com.ggoobuk.primitive.SpotlessConventionPlugin"
         }
         register("koinPrimitive") {
-            id = "template.primitive.koin"
-            implementationClass = "com.minjun.primitive.KoinConventionPlugin"
+            id = "ggoobuk.primitive.koin"
+            implementationClass = "com.ggoobuk.primitive.KoinConventionPlugin"
         }
         register("kmpFeature") {
-            id = "template.convention.kmp.feature"
-            implementationClass = "com.minjun.convention.KmpFeatureConventionPlugin"
+            id = "ggoobuk.convention.kmp.feature"
+            implementationClass = "com.ggoobuk.convention.KmpFeatureConventionPlugin"
         }
     }
 }
