@@ -1,4 +1,4 @@
-rootProject.name = "KotlinMultiPlatformTemplate"
+rootProject.name = "Ggoobuk"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -34,5 +34,12 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":androidApp")
 include(":feature:home")
-include(":core:designsystem")
-include(":core:model")
+
+include(":core:domain")
+include(":feature:timersetup")
+include(":feature:bussetup")
+include(":feature:subwaysetup")
+include(":feature:timerrunning")
+include(":feature:busrunning")
+include(":feature:subwayrunning")
+include(":feature:alarm")

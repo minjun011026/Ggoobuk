@@ -95,11 +95,11 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 androidLint = { id = "com.android.lint", version.ref = "agp" }
 
-template-primitive-kmp = { id = "template.primitive.kmp" }
-template-primitive-kmp-ios = { id = "template.primitive.kmp.ios" }
-template-primitive-kmp-compose = { id = "template.primitive.kmp.compose" }
-template-primitive-compose-resources = { id = "template.primitive.compose.resources" }
-template-primitive-skie = { id = "template.primitive.skie" }
-template-primitive-spotless = { id = "template.primitive.spotless" }
-template-primitive-koin = { id = "template.primitive.koin" }
-template-convention-kmp-feature = { id = "template.convention.kmp.feature" }
+ggoobuk-primitive-kmp = { id = "ggoobuk.primitive.kmp" }
+ggoobuk-primitive-kmp-ios = { id = "ggoobuk.primitive.kmp.ios" }
+ggoobuk-primitive-kmp-compose = { id = "ggoobuk.primitive.kmp.compose" }
+ggoobuk-primitive-compose-resources = { id = "ggoobuk.primitive.compose.resources" }
+ggoobuk-primitive-skie = { id = "ggoobuk.primitive.skie" }
+ggoobuk-primitive-spotless = { id = "ggoobuk.primitive.spotless" }
+ggoobuk-primitive-koin = { id = "ggoobuk.primitive.koin" }
+ggoobuk-convention-kmp-feature = { id = "ggoobuk.convention.kmp.feature" }

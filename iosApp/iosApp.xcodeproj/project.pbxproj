@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		336182202059F3B4355C0BA0 /* KotlinMultiPlatformTemplate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KotlinMultiPlatformTemplate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		336182202059F3B4355C0BA0 /* KotlinMultiPlatformggoobuk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KotlinMultiPlatformggoobuk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -59,7 +59,7 @@
 		5C84489CAB473E1ECF68BAED /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				336182202059F3B4355C0BA0 /* KotlinMultiPlatformTemplate.app */,
+				336182202059F3B4355C0BA0 /* KotlinMultiPlatformggoobuk.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,7 +87,7 @@
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = 336182202059F3B4355C0BA0 /* KotlinMultiPlatformTemplate.app */;
+			productReference = 336182202059F3B4355C0BA0 /* KotlinMultiPlatformggoobuk.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
