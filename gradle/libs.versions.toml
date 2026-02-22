@@ -1,5 +1,6 @@
 [versions]
 agp = "9.0.1"
+koinAndroid = "4.1.1"
 kotlin = "2.3.0"
 kotlinx-serialization = "1.10.0"
 jetbrainsKotlinJvm = "2.3.0"
@@ -33,6 +34,9 @@ kotlinStdlib = "2.3.0"
 runner = "1.7.0"
 core = "1.7.0"
 
+multiplatform-nav3 = "1.0.0-alpha05"
+compose-multiplatform-lifecycle = "2.10.0-alpha05"
+
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-testExt-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-testExt" }
@@ -52,7 +56,12 @@ compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-previ
 
 compose-uiTooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
 
+# Navigation 3 (Compose Multiplatform)
+jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "multiplatform-nav3" }
+jetbrains-lifecycle-viewmodelNavigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "compose-multiplatform-lifecycle" }
+
 # Koin
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }

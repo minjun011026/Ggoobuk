@@ -3,7 +3,7 @@
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="ComposeApp"
-        android:name="android.app.Application"
+        android:name=".GgoobukApplication"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity
             android:name="com.ggoobuk.app.MainActivity"
