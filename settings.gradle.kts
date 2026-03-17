@@ -33,8 +33,6 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":androidApp")
-include(":feature:home")
-
 include(":core:domain")
 include(":feature:timersetup")
 include(":feature:bussetup")
