@@ -1,6 +1,5 @@
 package com.ggoobuk.app
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
@@ -15,6 +14,7 @@ import com.ggoobuk.app.navigation.SubwaySetupRoute
 import com.ggoobuk.app.navigation.TimerRunningRoute
 import com.ggoobuk.app.navigation.TimerSetupRoute
 import com.ggoobuk.app.navigation.navigationConfig
+import com.minjun.designsystem.theme.GgoobukTheme
 import com.minjun.timersetup.TimeSetupScreen
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
@@ -23,7 +23,7 @@ import org.koin.dsl.module
 
 @Composable
 fun App() {
-    MaterialTheme {
+    GgoobukTheme {
         val backStack = rememberNavBackStack(navigationConfig, TimerSetupRoute)
 
         NavDisplay(

@@ -1,0 +1,5 @@
+<resources>
+    <string name="timer">타이머</string>
+    <string name="bus">버스</string>
+    <string name="subway">지하철</string>
+</resources>

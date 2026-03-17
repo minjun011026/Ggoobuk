@@ -26,6 +26,7 @@ class KmpComposePrimitivePlugin : Plugin<Project> {
                 implementation(libs.library("compose-uiToolingPreview"))
             }
 
+            dependencies.add("androidRuntimeClasspath", libs.library("compose-uiTooling"))
         }
     }
 }
