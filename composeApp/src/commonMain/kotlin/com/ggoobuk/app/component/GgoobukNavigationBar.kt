@@ -3,7 +3,7 @@ package com.ggoobuk.app.component
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -25,12 +25,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.stringResource
+import com.minjun.designsystem.theme.GgoobukTheme
 
 @Composable
 internal fun GgoobukNavigationBar(
@@ -43,19 +42,14 @@ internal fun GgoobukNavigationBar(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .border(
-                width = Dp.Hairline,
-                brush = Brush.verticalGradient(
-                    listOf(
-                        Color.White.copy(alpha = 0.8f),
-                        Color.White.copy(alpha = 0.2f),
-                    ),
-                ),
+            .shadow(
+                elevation = 4.dp,
                 shape = CircleShape,
             )
-            .clip(CircleShape),
+            .fillMaxWidth()
+            .height(64.dp)
+            .clip(CircleShape)
+            .background(Color.White),
         contentAlignment = Alignment.Center,
     ) {
         BottomNavigationBarItems(
@@ -103,20 +97,33 @@ private fun NavigationTabItem(
         label = "scale",
     )
 
+    val indicatorShape = MaterialTheme.shapes.medium
+
     Box(
         modifier = modifier
+            .padding(vertical = 6.dp, horizontal = 28.dp)
             .scale(scale)
+            .shadow(
+                elevation = if (selected) 3.dp else 0.dp,
+                shape = indicatorShape,
+                clip = false
+            )
+            .clip(indicatorShape)
+            .background(
+                if (selected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
+            )
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = { onTabSelected(tab) },
                 indication = null,
-            ),
+            )
+        ,
         contentAlignment = Alignment.Center,
     ) {
         Icon(
             imageVector = if (selected) tab.iconOn else tab.iconOff,
             contentDescription = "",
-            tint = if (selected) MaterialTheme.colorScheme.primaryFixed else MaterialTheme.colorScheme.onSurfaceVariant,
+            tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(24.dp),
         )
     }
@@ -125,8 +132,14 @@ private fun NavigationTabItem(
 @Preview
 @Composable
 private fun GgoobukNavigationBarPreview() {
-    GgoobukNavigationBar(
-        currentTab = MainScreenTab.Timer,
-        onTabSelected = {},
-    )
+    GgoobukTheme {
+        Box(
+            Modifier.background(Color.White)
+        ) {
+            GgoobukNavigationBar(
+                currentTab = MainScreenTab.Timer,
+                onTabSelected = {},
+            )
+        }
+    }
 }
