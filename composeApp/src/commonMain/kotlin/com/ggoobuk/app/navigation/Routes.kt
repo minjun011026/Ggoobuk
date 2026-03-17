@@ -2,12 +2,10 @@ package com.ggoobuk.app.navigation
 
 import androidx.navigation3.runtime.NavKey
 import androidx.savedstate.serialization.SavedStateConfiguration
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-
-@Serializable
-data object HomeRoute : NavKey
 
 @Serializable
 data object TimerSetupRoute : NavKey
@@ -31,10 +29,10 @@ data object SubwayRunningRoute : NavKey
 data object AlarmRoute : NavKey
 
 // iOS 등 Non-JVM 플랫폼의 다형성 직렬화를 위한 설정 (Open Polymorphism)
+@OptIn(ExperimentalSerializationApi::class)
 val navigationConfig = SavedStateConfiguration {
     serializersModule = SerializersModule {
         polymorphic(NavKey::class) {
-            subclass(HomeRoute::class, HomeRoute.serializer())
             subclass(TimerSetupRoute::class, TimerSetupRoute.serializer())
             subclass(BusSetupRoute::class, BusSetupRoute.serializer())
             subclass(SubwaySetupRoute::class, SubwaySetupRoute.serializer())

@@ -15,6 +15,14 @@ kotlin {
             implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.jetbrains.lifecycle.viewmodelNavigation3)
             implementation(libs.kotlinx.serialization.json)
+
+            implementation(projects.feature.timersetup)
+            implementation(projects.feature.bussetup)
+            implementation(projects.feature.subwaysetup)
+            implementation(projects.feature.timerrunning)
+            implementation(projects.feature.busrunning)
+            implementation(projects.feature.subwayrunning)
+            implementation(projects.feature.alarm)
         }
     }
 }
