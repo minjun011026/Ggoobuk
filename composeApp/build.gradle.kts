@@ -18,6 +18,7 @@ kotlin {
             implementation(libs.material.icons.extended)
 
             implementation(projects.core.designsystem)
+            implementation(projects.core.ui)
             implementation(projects.feature.timersetup)
             implementation(projects.feature.bussetup)
             implementation(projects.feature.subwaysetup)

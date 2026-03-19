@@ -1,4 +1,4 @@
-package com.minjun.designsystem.theme
+package com.ggoobuk.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

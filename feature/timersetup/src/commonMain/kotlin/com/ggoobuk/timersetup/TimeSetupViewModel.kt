@@ -1,4 +1,4 @@
-package com.minjun.timersetup
+package com.ggoobuk.timersetup
 
 import androidx.lifecycle.ViewModel
 
