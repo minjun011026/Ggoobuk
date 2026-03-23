@@ -42,6 +42,7 @@ internal fun GgoobukNavigationBar(
 
     Box(
         modifier = modifier
+            .padding(horizontal = 12.dp)
             .shadow(
                 elevation = 4.dp,
                 shape = CircleShape,
@@ -113,7 +114,7 @@ private fun NavigationTabItem(
                 if (selected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
             )
             .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = null,
                 onClick = { onTabSelected(tab) },
                 indication = null,
             )

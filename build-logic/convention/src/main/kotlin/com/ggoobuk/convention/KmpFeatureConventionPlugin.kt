@@ -26,6 +26,10 @@ class KmpFeatureConventionPlugin : Plugin<Project> {
                     implementation(libs.library("kotlinxCollectionsImmutable"))
                     implementation(libs.library("androidx-lifecycle-runtimeCompose"))
                     implementation(libs.library("androidx-lifecycle-viewmodelCompose"))
+                    implementation(project(":core:designsystem"))
+                    implementation(project(":core:model"))
+                    implementation(project(":core:domain"))
+                    implementation(project(":core:ui"))
                 }
 
                 sourceSets.getByName("commonTest").dependencies {
