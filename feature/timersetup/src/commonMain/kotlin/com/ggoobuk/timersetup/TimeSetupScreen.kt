@@ -13,6 +13,7 @@ import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +25,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ggoobuk.designsystem.theme.GgoobukTheme
 import com.ggoobuk.ui.BookmarkIconButton
+import com.ggoobuk.ui.GgoobukCustomChip
 import org.koin.compose.viewmodel.koinViewModel
 
 @Suppress("ParamsComparedByRef")
@@ -142,12 +143,9 @@ internal fun TimeSetupContent(
         modifier = modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
     ) {
-        Box(
-            modifier = modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
+        Box(contentAlignment = Alignment.Center) {
             AnimatedContent(
                 targetState = isExpanded,
                 contentAlignment = Alignment.Center,
@@ -160,7 +158,7 @@ internal fun TimeSetupContent(
             ) { expanded ->
                 if (!expanded) {
                     Text(
-                        text = "$hour:$minute:$second",
+                        text = "$hour : $minute : $second",
                         style = MaterialTheme.typography.displayLarge.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 64.sp
@@ -246,24 +244,35 @@ internal fun TimeSetupContent(
             }
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            val timeOffsets =
-                listOf(1 to "+1분", 5 to "+5분", 10 to "+10분", 30 to "+30분", 60 to "+1시간")
-            timeOffsets.forEach { (minutes, label) ->
-                AssistChip(
-                    onClick = { onAddTimeClick(minutes) },
-                    label = { Text(label) }
-                )
-            }
+        TimeOffsetLayout(onAddTimeClick = onAddTimeClick)
+    }
+}
+
+@Composable
+internal fun TimeOffsetLayout(
+    onAddTimeClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    FlowRow(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 40.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+    ) {
+        val timeOffsets =
+            listOf(1 to "+ 1분", 5 to "+ 5분", 10 to "+ 10분", 30 to "+ 30분", 60 to "+ 1시간")
+        timeOffsets.forEach { (minutes, label) ->
+            GgoobukCustomChip(
+                onClick = { onAddTimeClick(minutes) },
+                label = label
+            )
         }
     }
 }
 
 @Composable
-fun NumberPickerDial(
+internal fun NumberPickerDial(
     value: Int,
     range: IntRange,
     onValueChange: (Int) -> Unit,

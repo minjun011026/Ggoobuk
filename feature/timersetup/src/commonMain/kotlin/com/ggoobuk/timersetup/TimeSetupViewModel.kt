@@ -45,7 +45,7 @@ class TimeSetupViewModel(
     )
 
     fun updateHour(hour: Int) {
-        _hour.value = hour.coerceIn(0, 99)
+        _hour.value = hour.coerceIn(0, 23)
     }
 
     fun updateMinute(minute: Int) {
@@ -58,7 +58,7 @@ class TimeSetupViewModel(
 
     fun addTimeOffset(minutesToAdd: Int) {
         val currentTotalMinutes = (_hour.value * 60) + _minute.value + minutesToAdd
-        _hour.value = (currentTotalMinutes / 60).coerceIn(0, 99)
+        _hour.value = (currentTotalMinutes / 60).coerceIn(0, 23)
         _minute.value = currentTotalMinutes % 60
     }
 
