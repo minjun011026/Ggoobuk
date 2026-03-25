@@ -39,6 +39,8 @@ kotlin {
 
 dependencies {
     implementation(projects.composeApp)
+    implementation(projects.core.database)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.uiToolingPreview)
     implementation(libs.koin.android)

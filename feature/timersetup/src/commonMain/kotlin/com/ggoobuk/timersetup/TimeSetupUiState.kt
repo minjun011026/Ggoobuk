@@ -15,7 +15,8 @@ sealed interface TimeSetupUiState {
         val hour : Int,
         val minute : Int,
         val second : Int,
-        val bookmarkedTimes : List<Time>
+        val bookmarkedTimes : List<Time>,
+        val isBookmarked : Boolean
     ) : TimeSetupUiState
 
 }
