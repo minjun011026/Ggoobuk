@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +20,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.ggoobuk.ui.LocalBottomNavigationBarsPadding
 
 @Composable
@@ -72,7 +74,8 @@ private fun GgoobukNavigationScaffold(
                             WindowInsets.safeDrawing
                                 .exclude(WindowInsets.ime)
                                 .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom),
-                        ),
+                        )
+                        .padding(bottom = 16.dp),
                 )
             }
         },

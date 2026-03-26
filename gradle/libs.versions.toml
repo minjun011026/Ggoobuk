@@ -15,6 +15,9 @@ androidx-espresso = "3.7.0"
 androidx-lifecycle = "2.9.6"
 androidx-testExt = "1.3.0"
 
+room = "2.8.4"
+sqlite = "2.6.2"
+
 composeMultiplatform = "1.10.1"
 material3 = "1.10.0-alpha05"
 
@@ -25,7 +28,7 @@ skie = "0.10.10"
 spotless = "7.0.2"
 ktlint = "1.5.0"
 
-kotlinxCollectionsImmutable = "0.3.8"
+kotlinxCollectionsImmutable = "0.4.0"
 
 robolectric = "4.14.1"
 composablePreviewScanner = "0.8.1"
@@ -45,6 +48,11 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+
+# Room
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 # Compose UI & Runtime
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
@@ -105,6 +113,7 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 androidLint = { id = "com.android.lint", version.ref = "agp" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
 
 ggoobuk-primitive-kmp = { id = "ggoobuk.primitive.kmp" }
 ggoobuk-primitive-kmp-ios = { id = "ggoobuk.primitive.kmp.ios" }

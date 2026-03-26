@@ -16,8 +16,12 @@ import com.ggoobuk.app.navigation.SubwaySetupRoute
 import com.ggoobuk.app.navigation.TimerRunningRoute
 import com.ggoobuk.app.navigation.TimerSetupRoute
 import com.ggoobuk.app.navigation.navigationConfig
+import com.ggoobuk.data.di.coreDataModule
+import com.ggoobuk.database.di.coreDatabaseModule
 import com.ggoobuk.designsystem.theme.GgoobukTheme
+import com.ggoobuk.domain.di.coreDomainModule
 import com.ggoobuk.timersetup.TimeSetupScreen
+import com.ggoobuk.timersetup.di.featureTimeSetUpModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.includes
@@ -55,7 +59,9 @@ fun App() {
                 ),
                 entryProvider = entryProvider {
                     entry<TimerSetupRoute> {
-                        TimeSetupScreen()
+                        TimeSetupScreen(
+                            onTimerStartClick = { backStack.add(TimerRunningRoute) }
+                        )
                     }
 
                     entry<BusSetupRoute> {
@@ -88,7 +94,14 @@ fun App() {
 }
 
 internal val appModule = module {
-    includes()
+    includes(
+        featureTimeSetUpModule
+    )
+    includes(
+        coreDataModule,
+        coreDatabaseModule,
+        coreDomainModule
+    )
 }
 
 fun initKoin(
