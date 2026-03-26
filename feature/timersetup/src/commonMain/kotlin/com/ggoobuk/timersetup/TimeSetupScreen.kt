@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -30,11 +31,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,8 +51,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ggoobuk.designsystem.theme.GgoobukTheme
+import com.ggoobuk.model.Time
 import com.ggoobuk.ui.BookmarkIconButton
+import com.ggoobuk.ui.BookmarkItemCard
 import com.ggoobuk.ui.GgoobukCustomChip
+import com.ggoobuk.ui.SleepingGgoobukImage
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.viewmodel.koinViewModel
 
 @Suppress("ParamsComparedByRef")
@@ -64,9 +72,7 @@ fun TimeSetupScreen(
 
     TimeSetupScreen(
         uiState = uiState,
-        onHourChange = viewModel::updateHour,
-        onMinuteChange = viewModel::updateMinute,
-        onSecondChange = viewModel::updateSecond,
+        onTimeChange = viewModel::updateTime,
         onAddTimeClick = viewModel::addTimeOffset,
         onBookmarkToggle = viewModel::toggleBookmark,
         modifier = modifier,
@@ -76,9 +82,7 @@ fun TimeSetupScreen(
 @Composable
 internal fun TimeSetupScreen(
     uiState: TimeSetupUiState,
-    onHourChange: (Int) -> Unit,
-    onMinuteChange: (Int) -> Unit,
-    onSecondChange: (Int) -> Unit,
+    onTimeChange: (Int, Int, Int) -> Unit,
     onAddTimeClick: (Int) -> Unit,
     onBookmarkToggle: () -> Unit,
     modifier: Modifier = Modifier,
@@ -95,10 +99,9 @@ internal fun TimeSetupScreen(
                 hour = uiState.hour,
                 minute = uiState.minute,
                 second = uiState.second,
+                bookmarkedTimes = uiState.bookmarkedTimes,
                 isBookmarked = uiState.isBookmarked,
-                onHourChange = onHourChange,
-                onMinuteChange = onMinuteChange,
-                onSecondChange = onSecondChange,
+                onTimeChange = onTimeChange,
                 onAddTimeClick = onAddTimeClick,
                 onBookmarkToggle = onBookmarkToggle,
             )
@@ -110,7 +113,19 @@ internal fun TimeSetupScreen(
 internal fun LoadingState(
     modifier: Modifier = Modifier,
 ) {
-    Text("Loading")
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        SleepingGgoobukImage()
+        Text(
+            text = "꾸벅이가 일어나는 중이에요...!",
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.primary,
+            )
+        )
+    }
 }
 
 @Composable
@@ -118,11 +133,43 @@ internal fun TimeSetupContent(
     hour: Int,
     minute: Int,
     second: Int,
+    bookmarkedTimes: ImmutableList<Time>,
     isBookmarked: Boolean,
-    onHourChange: (Int) -> Unit,
-    onMinuteChange: (Int) -> Unit,
-    onSecondChange: (Int) -> Unit,
+    onTimeChange: (Int, Int, Int) -> Unit,
     onAddTimeClick: (Int) -> Unit,
+    onBookmarkToggle: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
+    ) {
+        TimerPickerCard(
+            hour = hour,
+            minute = minute,
+            second = second,
+            isBookmarked = isBookmarked,
+            onTimeChange = onTimeChange,
+            onBookmarkToggle = onBookmarkToggle,
+        )
+        TimeOffsetLayout(onAddTimeClick = onAddTimeClick)
+        BookmarkSection(
+            bookmarkedTimes = bookmarkedTimes,
+            onTimeChange = onTimeChange,
+        )
+    }
+}
+
+@Composable
+internal fun TimerPickerCard(
+    hour: Int,
+    minute: Int,
+    second: Int,
+    isBookmarked: Boolean,
+    onTimeChange: (Int, Int, Int) -> Unit,
     onBookmarkToggle: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -139,112 +186,164 @@ internal fun TimeSetupContent(
         label = "DelayedShadowElevation"
     )
 
-    Column(
-        modifier = modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            AnimatedContent(
-                targetState = isExpanded,
-                contentAlignment = Alignment.Center,
-                transitionSpec = {
-                    (fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.7f))
-                        .togetherWith(fadeOut(animationSpec = tween(200)))
-                        .using(SizeTransform(clip = false))
-                },
-                label = "TimerExpandAnimation"
-            ) { expanded ->
-                if (!expanded) {
-                    Text(
-                        text = "$hour : $minute : $second",
-                        style = MaterialTheme.typography.displayLarge.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 64.sp
-                        ),
-                        color = Color(0xFF333333),
-                        modifier = Modifier.clickable(
-                            interactionSource = null,
-                            indication = null,
-                            onClick = { isExpanded = true }
-                        )
+        AnimatedContent(
+            targetState = isExpanded,
+            contentAlignment = Alignment.Center,
+            transitionSpec = {
+                (fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.7f))
+                    .togetherWith(fadeOut(animationSpec = tween(200)))
+                    .using(SizeTransform(clip = false))
+            },
+            label = "TimerExpandAnimation"
+        ) { expanded ->
+            if (!expanded) {
+                Text(
+                    text = "$hour : $minute : $second",
+                    style = MaterialTheme.typography.displayLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 64.sp
+                    ),
+                    color = Color(0xFF333333),
+                    modifier = Modifier.clickable(
+                        interactionSource = null,
+                        indication = null,
+                        onClick = { isExpanded = true }
                     )
-                } else {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .wrapContentHeight()
-                            .shadow(
-                                elevation = shadowElevation,
-                                shape = RoundedCornerShape(24.dp)
-                            ),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                    ) {
-                        Box(modifier = Modifier.fillMaxWidth()) {
-                            Column(
-                                modifier = Modifier.padding(20.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                )
+            } else {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .wrapContentHeight()
+                        .shadow(
+                            elevation = shadowElevation,
+                            shape = RoundedCornerShape(24.dp)
+                        ),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                ) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Column(
+                            modifier = Modifier.padding(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceAround
-                                ) {
-                                    PickerLabel("Hours")
-                                    PickerLabel("Minutes")
-                                    PickerLabel("Seconds")
-                                }
-
-                                Row(
-                                    modifier = Modifier.fillMaxWidth().height(140.dp),
-                                    horizontalArrangement = Arrangement.SpaceEvenly,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    NumberPickerDial(
-                                        value = hour,
-                                        range = 0..23,
-                                        onValueChange = onHourChange,
-                                    )
-                                    NumberPickerDial(
-                                        value = minute,
-                                        range = 0..59,
-                                        onValueChange = onMinuteChange,
-                                    )
-                                    NumberPickerDial(
-                                        value = second,
-                                        range = 0..59,
-                                        onValueChange = onSecondChange,
-                                    )
-                                }
-
-                                Button(
-                                    onClick = { isExpanded = false },
-                                    modifier = Modifier.fillMaxWidth().height(56.dp),
-                                    shape = RoundedCornerShape(16.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color(
-                                            0xFF008080
-                                        )
-                                    )
-                                ) {
-                                    Text("완료", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                                }
+                                PickerLabel("Hours")
+                                PickerLabel("Minutes")
+                                PickerLabel("Seconds")
                             }
 
-                            BookmarkIconButton(
-                                isBookmarked = isBookmarked,
-                                onClick = onBookmarkToggle,
-                                modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth().height(140.dp),
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                NumberPickerDial(
+                                    value = hour,
+                                    range = 0..23,
+                                    onValueChange = { newHour ->
+                                        onTimeChange(newHour, minute, second)
+                                    },
+                                )
+                                NumberPickerDial(
+                                    value = minute,
+                                    range = 0..59,
+                                    onValueChange = { newMinute ->
+                                        onTimeChange(hour, newMinute, second)
+                                    },
+                                )
+                                NumberPickerDial(
+                                    value = second,
+                                    range = 0..59,
+                                    onValueChange = { newSecond ->
+                                        onTimeChange(hour, minute, newSecond)
+                                    },
+                                )
+                            }
 
+                            Button(
+                                onClick = { isExpanded = false },
+                                modifier = Modifier.fillMaxWidth().height(56.dp),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(
+                                        0xFF008080
+                                    )
+                                )
+                            ) {
+                                Text("완료", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                            }
                         }
+
+                        BookmarkIconButton(
+                            isBookmarked = isBookmarked,
+                            onClick = onBookmarkToggle,
+                            modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)
+                        )
+
                     }
                 }
             }
         }
+    }
+}
 
-        TimeOffsetLayout(onAddTimeClick = onAddTimeClick)
+@Composable
+internal fun BookmarkSection(
+    bookmarkedTimes: ImmutableList<Time>,
+    onTimeChange: (Int, Int, Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(
+            text = "즐겨찾기 목록",
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color(0xFF333333)
+            )
+        )
+
+        if (bookmarkedTimes.isEmpty()) {
+            Text(
+                text = "저장된 시간이 없습니다.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 8.dp)
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(bottom = 12.dp),
+            ) {
+                items(bookmarkedTimes) { time ->
+                    key("${time.hour}-${time.minute}-${time.second}") {
+                        BookmarkItemCard(
+                            text = "${time.hour.toString().padStart(2, '0')} : " +
+                                    "${time.minute.toString().padStart(2, '0')} : " +
+                                    time.second.toString().padStart(2, '0'),
+                            onClick = { onTimeChange(time.hour, time.minute, time.second) }
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -312,7 +411,7 @@ internal fun NumberPickerDial(
         state = listState,
         flingBehavior = flingBehavior,
         modifier = modifier.width(60.dp).height(120.dp),
-        contentPadding = PaddingValues(vertical = verticalPadding),
+        contentPadding = PaddingValues(bottom = verticalPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(Int.MAX_VALUE) { index ->
@@ -344,16 +443,30 @@ internal fun PickerLabel(label: String) {
 @Composable
 private fun TimeSetupScreenPreview() {
     GgoobukTheme {
-        TimeSetupContent(
-            hour = 0,
-            minute = 0,
-            second = 0,
-            isBookmarked = false,
-            onHourChange = {},
-            onMinuteChange = {},
-            onSecondChange = {},
-            onAddTimeClick = {},
-            onBookmarkToggle = {},
-        )
+        Surface {
+            TimeSetupContent(
+                hour = 0,
+                minute = 0,
+                second = 0,
+                isBookmarked = false,
+                bookmarkedTimes = persistentListOf(
+                    Time(1, 2, 3),
+                    Time(4, 5, 6),
+                ),
+                onTimeChange = { _, _, _ -> },
+                onAddTimeClick = {},
+                onBookmarkToggle = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TimeSetupScreenLoadingPreview() {
+    GgoobukTheme {
+        Surface {
+            LoadingState()
+        }
     }
 }

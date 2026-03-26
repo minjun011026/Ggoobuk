@@ -5,10 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.ggoobuk.data.repository.api.BookmarkRepository
 import com.ggoobuk.domain.usecase.CheckBookmarkUseCase
 import com.ggoobuk.model.Time
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -21,11 +24,12 @@ class TimeSetupViewModel(
     private val _minute = MutableStateFlow(0)
     private val _second = MutableStateFlow(0)
 
-    private val _bookmarks: StateFlow<List<Time>> = bookmarkRepository.getBookmarkedTimes()
+    private val _bookmarks = bookmarkRepository.getBookmarkedTimes()
+        .map { it.toImmutableList() }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList() // 초기값은 빈 리스트
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = persistentListOf()
         )
 
     val uiState: StateFlow<TimeSetupUiState> = combine(
@@ -44,15 +48,9 @@ class TimeSetupViewModel(
         initialValue = TimeSetupUiState.Loading
     )
 
-    fun updateHour(hour: Int) {
+    fun updateTime(hour: Int, minute: Int, second: Int) {
         _hour.value = hour.coerceIn(0, 23)
-    }
-
-    fun updateMinute(minute: Int) {
         _minute.value = minute.coerceIn(0, 59)
-    }
-
-    fun updateSecond(second: Int) {
         _second.value = second.coerceIn(0, 59)
     }
 
@@ -64,17 +62,12 @@ class TimeSetupViewModel(
 
     fun toggleBookmark() {
         viewModelScope.launch {
-            val h = _hour.value
-            val m = _minute.value
-            val s = _second.value
-            val targetTime = Time(h, m, s)
+            val current = Time(_hour.value, _minute.value, _second.value)
 
-            val isCurrentlyBookmarked = checkBookmarkUseCase(h, m, s, _bookmarks.value)
-
-            if (isCurrentlyBookmarked) {
-                bookmarkRepository.removeBookmark(targetTime)
+            if (checkBookmarkUseCase(current.hour, current.minute, current.second, _bookmarks.value)) {
+                bookmarkRepository.removeBookmark(current)
             } else {
-                bookmarkRepository.addBookmark(targetTime)
+                bookmarkRepository.addBookmark(current)
             }
         }
     }
